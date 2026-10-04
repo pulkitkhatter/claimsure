@@ -1,0 +1,33 @@
+server:
+  port: 9083
+spring:
+  application:
+    name: claims-service
+  data:
+    mongodb:
+      uri: ${MONGO_URI:mongodb://localhost:27017/claimsure_claims}
+      auto-index-creation: true
+  kafka:
+    bootstrap-servers: ${KAFKA_BROKERS:localhost:9092}
+    producer:
+      acks: all
+      properties:
+        max.block.ms: 2000
+        delivery.timeout.ms: 10000
+        request.timeout.ms: 5000
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL:http://localhost:9761/eureka}
+  instance:
+    prefer-ip-address: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+claimsure:
+  security:
+    secret: ${JWT_SECRET:dev-only-secret-change-me-0123456789abcdef}
+  policy-service:
+    url: http://policy-service

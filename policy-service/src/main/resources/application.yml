@@ -1,0 +1,38 @@
+server:
+  port: 9082
+spring:
+  application:
+    name: policy-service
+  data:
+    mongodb:
+      uri: ${MONGO_URI:mongodb://localhost:27017/claimsure_policy}
+      auto-index-creation: true
+  cache:
+    type: caffeine
+    cache-names: quotes,catalog
+    caffeine:
+      spec: maximumSize=10000,expireAfterWrite=10m
+  kafka:
+    bootstrap-servers: ${KAFKA_BROKERS:localhost:9092}
+    producer:
+      acks: all
+      properties:
+        max.block.ms: 2000
+        delivery.timeout.ms: 10000
+        request.timeout.ms: 5000
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL:http://localhost:9761/eureka}
+  instance:
+    prefer-ip-address: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,caches
+claimsure:
+  security:
+    secret: ${JWT_SECRET:dev-only-secret-change-me-0123456789abcdef}
+    public-paths:
+      - /api/v1/products

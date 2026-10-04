@@ -1,0 +1,48 @@
+server:
+  port: 9080
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/api/**]':
+            allowedOrigins: ${CORS_ORIGINS:http://localhost:9080}
+            allowedMethods: GET,POST,PUT,DELETE,OPTIONS
+            allowedHeaders: Authorization,Content-Type
+            maxAge: 3600
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin
+        - AddResponseHeader=X-Content-Type-Options, nosniff
+        - AddResponseHeader=X-Frame-Options, DENY
+        - AddResponseHeader=Referrer-Policy, no-referrer
+        - AddResponseHeader=Content-Security-Policy, default-src 'self'; img-src 'self' data:; frame-ancestors 'none'
+      routes:
+        - id: identity
+          uri: lb://identity-service
+          predicates:
+            - Path=/api/v1/auth/**
+        - id: policies
+          uri: lb://policy-service
+          predicates:
+            - Path=/api/*/quotes/**,/api/*/policies/**,/api/*/products/**
+        - id: claims
+          uri: lb://claims-service
+          predicates:
+            - Path=/api/*/claims/**
+        - id: notifications
+          uri: lb://notification-service
+          predicates:
+            - Path=/api/*/notifications/**
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL:http://localhost:9761/eureka}
+  instance:
+    prefer-ip-address: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,gateway

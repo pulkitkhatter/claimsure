@@ -1,0 +1,31 @@
+server:
+  port: 9081
+spring:
+  application:
+    name: identity-service
+  data:
+    mongodb:
+      uri: ${MONGO_URI:mongodb://localhost:27017/claimsure_identity}
+      auto-index-creation: true
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL:http://localhost:9761/eureka}
+  instance:
+    prefer-ip-address: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+claimsure:
+  security:
+    # DEV DEFAULT ONLY - every service must share the same value; override with JWT_SECRET in any real environment.
+    secret: ${JWT_SECRET:dev-only-secret-change-me-0123456789abcdef}
+    token-ttl: 1h
+    public-paths:
+      - /api/v1/auth/register
+      - /api/v1/auth/login
+  seed:
+    enabled: true
+    password: ${SEED_PASSWORD:Passw0rd!demo}

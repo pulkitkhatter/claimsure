@@ -1,0 +1,2 @@
+com.claimsure.common.security.SecurityAutoConfiguration
+com.claimsure.common.error.ErrorAutoConfiguration
