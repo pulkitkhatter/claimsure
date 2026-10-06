@@ -5,7 +5,7 @@ spring:
     name: identity-service
   data:
     mongodb:
-      uri: ${MONGO_URI:mongodb://localhost:27017/claimsure_identity}
+      uri: ${MONGO_URI:mongodb://localhost:${MONGO_PORT:27017}/claimsure_identity}
       auto-index-creation: true
 eureka:
   client:

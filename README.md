@@ -13,6 +13,21 @@ Spring Boot 3 / Java 21 microservices + vanilla-JS web app. A domain-different s
 
 Ports are 9xxx so it can run beside ShopSphere. Shared code lives in `common` (JWT resource-server config, RFC 7807 errors, event envelope).
 
+## Setup on a new machine
+Prerequisites: Git, **JDK 21**, **Docker Desktop (running)**. Maven is not needed (`./mvnw` is included). On Windows use Git Bash or WSL.
+
+```bash
+git clone https://github.com/pulkitkhatter/claimsure.git
+cd claimsure
+./scripts/start-all.sh      # first run takes a few minutes (downloads images + dependencies)
+```
+If a default port is already used by another program, pick free ones:
+```bash
+KAFKA_PORT=9192 MONGO_PORT=27018 ./scripts/start-all.sh
+```
+Troubleshooting: Docker not running -> start Docker Desktop; "port is already allocated" -> use the override above;
+a service failed -> read `logs/<service>.log`. Full explanation of the design: [docs/PROJECT_GUIDE.md](docs/PROJECT_GUIDE.md).
+
 ## Run
 ```bash
 ./scripts/start-all.sh   # Docker (MongoDB + Kafka), build, start all services

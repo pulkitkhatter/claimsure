@@ -4,6 +4,10 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 mkdir -p logs
 
+# Host ports for the infra can be changed if the defaults are taken, e.g.  KAFKA_PORT=9192 MONGO_PORT=27018 ./scripts/start-all.sh
+export KAFKA_PORT="${KAFKA_PORT:-9092}" MONGO_PORT="${MONGO_PORT:-27017}"
+export KAFKA_BROKERS="localhost:$KAFKA_PORT"
+
 docker compose up -d
 echo "Waiting for MongoDB..."
 until docker exec claimsure-mongo mongosh --quiet --eval 'db.adminCommand("ping").ok' >/dev/null 2>&1; do sleep 2; done
